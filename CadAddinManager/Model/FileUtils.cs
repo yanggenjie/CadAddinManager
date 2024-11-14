@@ -20,17 +20,6 @@ public static class FileUtils
         {
             directoryInfo.Create();
         }
-        foreach (var directoryInfo2 in directoryInfo.GetDirectories())
-        {
-            try
-            {
-                Directory.Delete(directoryInfo2.FullName, true);
-            }
-            catch
-            {
-                // ignored
-            }
-        }
         var str = $"{DateTime.Now:yyyyMMdd_HHmmss_ffff}";
         var path = Path.Combine(directoryInfo.FullName, prefix + str);
         var directoryInfo3 = new DirectoryInfo(path);
@@ -127,26 +116,7 @@ public static class FileUtils
         else
         {
             var folderSize = GetFolderSize(directoryName);
-            if (folderSize > 50L)
-            {
-                switch (FolderTooBigDialog.Show(directoryName, folderSize))
-                {
-                    case MessageBoxResult.Yes:
-                        CopyDirectory(directoryName, destFolder, allCopiedFiles);
-                        break;
-
-                    case MessageBoxResult.No:
-                        CopyFileToFolder(sourceFilePath, destFolder, true, allCopiedFiles);
-                        break;
-
-                    default:
-                        return null;
-                }
-            }
-            else
-            {
-                CopyDirectory(directoryName, destFolder, allCopiedFiles);
-            }
+            CopyDirectory(directoryName, destFolder, allCopiedFiles);
         }
         var text3 = Path.Combine(destFolder, Path.GetFileName(sourceFilePath));
         if (File.Exists(text3))
